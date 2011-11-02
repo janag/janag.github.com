@@ -1,0 +1,122 @@
+<!DOCTYPE html> 
+<html> 
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>SocketStream</title> 
+	<link rel="stylesheet"  href="../../css/themes/default/" /> 
+	<link rel="stylesheet" href="../_assets/css/jqm-docs.css"/>
+	<script src="../../js/jquery.js"></script>
+	<script src="../_assets/js/jqm-docs.js"></script>
+	<script src="../../js/"></script>
+</head> 
+<body> 
+
+<div data-role="page" class="type-interior">
+	<div data-role="header" data-id="ss-header" data-theme="f" data-position="fixed">
+		<h1>Installation</h1>
+		<a href="../../" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<div class="content-primary">
+			<div data-role="collapsible" data-collapsed="false" data-content-theme="c">
+			<h3>Setup</h3>
+			<h5>SocketStream runs on all UNIX based platforms, including OS X and Linux:</h5>
+			<div data-role="collapsible-set" data-content-theme="d">
+						<div data-role="collapsible">
+							<h3>Mac OS X (Snow Leopard)</h3>
+									<h5># install Node</h5>
+									<h6>Download latest stable (0.4.x) version from http://nodejs.org/#download</h6>
+									<h6>E.g. for Node 0.4.9</h6>
+									<ul>
+										<li>tar zxvf node-v0.4.9.tar.gz</li>
+										<li>cd node-v0.4.9</li>
+										<li>./configure</li>
+									  <li>make # this will take a couple of minutes</li>
+										<li>sudo make install</li>
+									</ul>
+									<h5># install npm</h5>
+									<p>curl http://npmjs.org/install.sh | sudo sh</p>
+
+									<h5># install SocketStream</h5>
+									<p>sudo npm install socketstream -g</p>
+
+									<h5># create a Socketstream app as a test</h5>
+									<ul>
+										<li>socketstream new test</li>
+										<li>cd test</li>
+										<li>socketstream start</li>
+									</ul>
+						</div>
+						<div data-role="collapsible">
+							<h3>Ubuntu (10.04)</h3>
+									<h5># install prerequisites</h5>
+									<p>sudo apt-get install build-essential automake git-core curl libssl-dev -y</p>
+
+									<h5># install and run redis</h5>
+									<ul>
+										<li>cd ~</li>
+										<li>wget http://redis.googlecode.com/files/redis-2.2.4.tar.gz</li>
+										<li>tar -xvzf redis-2.2.4.tar.gz</li>
+										<li>cd redis-2.2.4</li>
+										<li>make</li>
+										<li>sudo make install</li>
+										<li>env redis-server > /tmp/redis.log 2>&1 &</li>
+									</ul>
+									<h5># install Node.js</h5>
+
+									<h6>Download latest stable (0.4.x) version from http://nodejs.org/#download</h6>
+									<h6>E.g. for Node 0.4.9</h6>
+									<ul>
+										<li>tar zxvf node-v0.4.9.tar.gz</li>
+										<li>cd node-v0.4.9</li>
+										<li>./configure</li>
+										<li>make # this will take a couple of minutes</li>
+										<li>sudo make install</li>
+									</ul>
+									<h5># install npm</h5>
+									<p>curl http://npmjs.org/install.sh | sudo sh</p>
+
+									<h5># install SocketStream</h5>
+									<p>sudo npm install socketstream -g</p>
+
+									<h5># create a new socketstream project called 'test'</h5>
+									<ul>
+										<li>cd ~</li>
+										<li>socketstream new test</li>
+										<li>run test app</li>
+										<li>cd test</li>
+										<li>socketstream start</li>
+									</ul>
+						</div>
+			</div>
+			</div>
+		</div>
+		
+		<div class="content-secondary">
+			<div data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="d">
+					<h3>More in this section</h3>
+					<ul data-role="listview"  data-theme="c" data-dividertheme="d">
+						<li data-role="list-divider">Overview</li>
+						<li><a href="../../docs/about/intro.html">Introduction</a></li>
+						<li><a href="../../docs/about/features.html">Features</a></li>
+						<li data-theme="e"><a href="../../docs/about/install.html">Installation</a></li>
+						<li><a href="../../docs/about/usage.html">Usage</a></li>
+						<li><a href="../../docs/annotated/socketstream.html" target="_blank">Annotated Source</a></li>
+					</ul>
+			</div>
+		</div>		
+	</div>
+	<div data-role="footer" class="footer-docs" data-id="ss-footer" data-theme="a" data-position="fixed">
+			<p>
+				<a href="../../docs/about/about.html" data-rel="dialog" data-transition="pop">About</a>
+				<a href="https://github.com/socketstream/socketstream" target="_blank">GitHub</a>			
+				<a href="http://twitter.com/#!/socketstream" target="_blank">Twitter</a>
+				<a href="http://webchat.freenode.net/?channels=socketstream" target="_blank">IRC</a> 
+				<a href="http://groups.google.com/group/socketstream" target="_blank">GoogleGroup</a>					
+			</p>
+	</div>	
+</div>
+</body>
+</html>
