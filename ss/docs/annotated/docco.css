@@ -44,6 +44,7 @@ h1, h2, h3, h4, h5, h6 {
   position: fixed;
   right: 0; top: 0;
   padding: 5px 10px;
+  background:yellow
 }
   #jump_wrapper {
     padding: 0;
