@@ -1,0 +1,66 @@
+<!DOCTYPE html>  <html> <head>   <title>index.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="benchmarks.html">                 benchmarks.coffee               </a>                                           <a class="source" href="index.html">                 index.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               index.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h2>Benchmark</h2>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">util = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">)</span>
+
+<span class="nv">log = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../logger.coffee&#39;</span><span class="p">)</span>
+<span class="nv">stack = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./benchmarks.coffee&#39;</span><span class="p">).</span><span class="nx">benchmarks</span>
+
+<span class="nv">rpc = </span><span class="k">new</span> <span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../rpc/connection.coffee&#39;</span><span class="p">)).</span><span class="nx">Client</span><span class="p">(</span><span class="s1">&#39;benchmark&#39;</span><span class="p">)</span>
+
+<span class="nv">serialization = </span><span class="nx">SS</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">cluster</span><span class="p">.</span><span class="nx">serialization</span>
+
+<span class="nv">exports.bannerText = </span><span class="o">-&gt;</span>
+  <span class="p">[</span>
+    <span class="s2">&quot;Benchmark Suite&quot;</span>
+    <span class="s2">&quot;RPC protocol using #{serialization.toUpperCase()} serialization&quot;</span>
+  <span class="p">]</span>
+
+<span class="nv">exports.run = </span><span class="o">-&gt;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">  Welcome to the SocketStream benchmark suite. It&#39;</span><span class="nx">s</span> <span class="nx">early</span> <span class="nx">days</span> <span class="nx">yet</span> <span class="nx">but</span> <span class="nx">we</span><span class="s1">&#39;re going to use this command to performance tune and stress test every part of infrastructure.</span>
+
+<span class="s1">  Right now we&#39;</span><span class="nx">re</span> <span class="nx">just</span> <span class="nx">testing</span> <span class="nx">the</span> <span class="nx">router</span> <span class="o">and</span> <span class="nx">backend</span> <span class="nx">so</span> <span class="nx">make</span> <span class="nx">sure</span> <span class="nx">you</span> <span class="nx">start</span> <span class="nx">the</span> <span class="nx">router</span> <span class="s1">&#39;socketstream router&#39;</span> <span class="o">and</span> <span class="nx">at</span> <span class="nx">least</span> <span class="nx">one</span> <span class="nx">backend</span> <span class="nx">sever</span> <span class="s1">&#39;socketstream backend&#39;</span> <span class="nx">before</span> <span class="nx">running</span> <span class="k">this</span> <span class="nx">command</span><span class="p">.</span>
+  
+  <span class="nx">See</span> <span class="nx">how</span> <span class="nx">the</span> <span class="nx">load</span> <span class="o">is</span> <span class="nx">spread</span> <span class="nx">across</span> <span class="nx">multiple</span> <span class="nx">CPU</span> <span class="nx">cores</span> <span class="k">by</span> <span class="nx">experimenting</span> <span class="nx">with</span> <span class="nx">more</span> <span class="nx">backend</span> <span class="nx">servers</span> <span class="kc">on</span> <span class="nx">different</span> <span class="nx">machines</span> <span class="p">(</span><span class="nx">don</span><span class="s1">&#39;t forget to define your SS.config.cluster TCP sockets first). Control how many workers are started per-box with the -w flag. E.g. &#39;</span><span class="nx">socketstream</span> <span class="nx">backend</span> <span class="o">-</span><span class="nx">w</span> <span class="mi">4</span><span class="s1">&#39; for a quad core machine.</span>
+
+<span class="s1">  &#39;&#39;&#39;</span>
+  <span class="nx">execute</span><span class="p">()</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Private</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">output = </span><span class="nf">(msg, color) -&gt;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">log</span><span class="p">.</span><span class="nx">color</span><span class="p">(</span><span class="nx">msg</span><span class="p">,</span> <span class="nx">color</span><span class="p">)</span>
+
+<span class="nv">execute = </span><span class="nf">(i = 0) -&gt;</span>
+  <span class="k">if</span> <span class="nx">stack</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+    <span class="nx">setTimeout</span> <span class="p">(</span><span class="o">-&gt;</span> <span class="nx">run</span><span class="p">(</span><span class="nx">stack</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="o">-&gt;</span> <span class="nx">execute</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))),</span> <span class="mi">1000</span>
+  <span class="k">else</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s2">&quot;#{stack.length} benchmarks complete!\n&quot;</span>
+    <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="nv">benchmark = </span><span class="nf">(details) -&gt;</span>
+  <span class="nx">stack</span><span class="p">.</span><span class="nx">push</span> <span class="nx">details</span>
+
+<span class="nv">run = </span><span class="nf">(details, next) -&gt;</span>
+
+  <span class="k">return</span> <span class="nx">next</span><span class="p">()</span> <span class="nx">unless</span> <span class="nx">details</span><span class="p">.</span><span class="nx">enabled</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>Can someone make a funky colored progress bar indicator here? :)</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">printResults = </span><span class="o">-&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s2">&quot;#{recv} responses received&quot;</span>
+
+  <span class="nv">start = </span><span class="nb">Number</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">())</span>
+  <span class="nv">sent = </span><span class="mi">0</span>
+  <span class="nv">recv = </span><span class="mi">0</span>
+  <span class="nv">last = </span><span class="mi">0</span>
+
+  <span class="nx">output</span> <span class="s2">&quot;Running #{details.name} benchmark\n&quot;</span><span class="p">,</span> <span class="s1">&#39;cyan&#39;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">details</span><span class="p">.</span><span class="nx">description</span> <span class="o">+</span> <span class="s2">&quot;\n&quot;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s2">&quot;Sending #{details.requests} requests to the back end (via the router) using #{serialization}&quot;</span>
+
+  <span class="nv">printer = </span><span class="nx">setInterval</span><span class="p">(</span><span class="nx">printResults</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+  
+  <span class="k">while</span> <span class="nx">sent</span> <span class="o">&lt;</span> <span class="nx">details</span><span class="p">.</span><span class="nx">requests</span>
+    <span class="nv">obj = </span><span class="p">{</span><span class="nv">responder: </span><span class="nx">details</span><span class="p">.</span><span class="nx">command</span><span class="p">}</span>
+    <span class="nx">sent</span><span class="o">++</span>
+    <span class="nx">rpc</span><span class="p">.</span><span class="nx">send</span> <span class="nx">obj</span><span class="p">,</span> <span class="nf">(result) -&gt;</span>
+      <span class="nx">recv</span><span class="o">++</span>
+      <span class="k">if</span> <span class="nx">recv</span> <span class="o">==</span> <span class="nx">details</span><span class="p">.</span><span class="nx">requests</span>
+        <span class="nv">end = </span><span class="nb">Number</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">())</span>
+        <span class="nv">taken = </span><span class="nx">end</span> <span class="o">-</span> <span class="nx">start</span>
+        <span class="nx">output</span> <span class="s2">&quot;#{details.requests} responses received from the backend in #{taken}ms (#{parseInt(details.requests/(taken/1000))} rps)\n\n&quot;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span>
+        <span class="nx">clearInterval</span> <span class="nx">printer</span>
+        <span class="nx">next</span><span class="p">()</span>
+   
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

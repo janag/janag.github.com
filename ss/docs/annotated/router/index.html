@@ -1,0 +1,26 @@
+<!DOCTYPE html>  <html> <head>   <title>index.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="index.html">                 index.coffee               </a>                                           <a class="source" href="job_scheduler.html">                 job_scheduler.coffee               </a>                                           <a class="source" href="redis_proxy.html">                 redis_proxy.coffee               </a>                                           <a class="source" href="worker.html">                 worker.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               index.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h2>Router Manager</h2>
+
+<p>The 'socketstream router' command launches this manager / wrapper process which spawns a single worker process
+and automatically restarts it in the tragic event of death</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">spawn = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;child_process&#39;</span><span class="p">).</span><span class="nx">spawn</span>
+
+<span class="nv">exports.bannerText = </span><span class="nf">(standalone) -&gt;</span>
+  <span class="p">[</span>
+    <span class="s2">&quot;ZeroMQ message router and event proxy&quot;</span>
+    <span class="s2">&quot;Frontend main socket:   #{SS.config.cluster.sockets.fe_main}&quot;</span>
+    <span class="s2">&quot;Frontend pub socket:    #{SS.config.cluster.sockets.fe_pub}&quot;</span>
+    <span class="s2">&quot;Backend main socket:    #{SS.config.cluster.sockets.be_main}&quot;</span>
+  <span class="p">]</span>
+
+<span class="nv">exports.init = </span><span class="o">-&gt;</span>
+  <span class="nx">startWorker</span><span class="p">()</span>
+
+<span class="nv">startWorker = </span><span class="o">-&gt;</span>
+  <span class="nv">worker = </span><span class="nx">spawn</span><span class="p">(</span><span class="s1">&#39;socketstream&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;router-worker&#39;</span><span class="p">,</span> <span class="s1">&#39;--show-traffic&#39;</span><span class="p">])</span>
+  <span class="nx">worker</span><span class="p">.</span><span class="nx">stdout</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="nf">(data) -&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">data</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+  <span class="nx">worker</span><span class="p">.</span><span class="nx">stderr</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="nf">(data) -&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">data</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+  <span class="nx">worker</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;exit&#39;</span><span class="p">,</span> <span class="nf">(code, signal) -&gt;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s2">&quot;Oh dear. The router died with code: #{code}, signal #{signal}&quot;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s1">&#39;Restarting router...&#39;</span>
+    <span class="nx">startWorker</span><span class="p">()</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

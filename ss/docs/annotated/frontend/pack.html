@@ -1,0 +1,108 @@
+<!DOCTYPE html>  <html> <head>   <title>pack.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="api.html">                 api.coffee               </a>                                           <a class="source" href="browser_check.html">                 browser_check.coffee               </a>                                           <a class="source" href="compile.html">                 compile.coffee               </a>                                           <a class="source" href="http_redirect.html">                 http_redirect.coffee               </a>                                           <a class="source" href="https_redirect.html">                 https_redirect.coffee               </a>                                           <a class="source" href="index.html">                 index.coffee               </a>                                           <a class="source" href="manager.html">                 manager.coffee               </a>                                           <a class="source" href="pack.html">                 pack.coffee               </a>                                           <a class="source" href="parse_url.html">                 parse_url.coffee               </a>                                           <a class="source" href="rate_limiter.html">                 rate_limiter.coffee               </a>                                           <a class="source" href="redirect_to_root.html">                 redirect_to_root.coffee               </a>                                           <a class="source" href="server.html">                 server.coffee               </a>                                           <a class="source" href="socket.html">                 socket.coffee               </a>                                           <a class="source" href="socketstream.html">                 socketstream.coffee               </a>                                           <a class="source" href="ssl.html">                 ssl.coffee               </a>                                           <a class="source" href="subscribe.html">                 subscribe.coffee               </a>                                           <a class="source" href="templates.html">                 templates.coffee               </a>                                           <a class="source" href="utils.html">                 utils.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               pack.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h2>Asset Packer</h2>
+
+<p>Pre-concatenates/compiles/minifies files in advance to be served by the node static server</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">fs = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">)</span>
+<span class="nv">util = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">)</span>
+<span class="nv">coffee = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;coffee-script&#39;</span><span class="p">)</span>
+
+<span class="nv">EventEmitter = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">).</span><span class="nx">EventEmitter</span>
+<span class="nv">emitter = </span><span class="k">new</span> <span class="nx">EventEmitter</span>
+
+<span class="nv">utils = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./utils.coffee&#39;</span><span class="p">)</span>
+<span class="nv">file_utils = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../../utils/file&#39;</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Define where the SocketStream client files live</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">system_path = </span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/../client&#39;</span>
+
+<span class="nv">exports.init = </span><span class="nf">(@assets) -&gt;</span>
+  <span class="err">@</span>
+
+<span class="nv">exports.pack =</span>
+  
+  <span class="nv">all: </span><span class="o">-&gt;</span>
+    <span class="k">try</span>
+      <span class="nx">util</span><span class="p">.</span><span class="nx">log</span> <span class="s2">&quot;Pre-packing all client assets...&quot;</span>
+      <span class="nx">@libs</span><span class="p">()</span>
+      <span class="nx">@js</span><span class="p">.</span><span class="nx">app</span><span class="p">()</span>
+      <span class="nx">@css</span><span class="p">.</span><span class="nx">app</span><span class="p">()</span>
+      <span class="nx">@html</span><span class="p">.</span><span class="nx">app</span><span class="p">()</span>
+    <span class="k">catch</span> <span class="nx">e</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>Removes the .socketstream_state file to force asset files to rebuild next time instead of leaving empty/broken files</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="nx">SS</span><span class="p">.</span><span class="nx">internal</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">reset</span><span class="p">()</span>
+      <span class="nx">SS</span><span class="p">.</span><span class="nx">log</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">exception</span> <span class="nx">e</span>
+      <span class="k">throw</span> <span class="s1">&#39;Error: Unable to pack client assets. Files will be re-generated next time&#39;</span>
+  
+  <span class="nv">libs: </span><span class="o">-&gt;</span>
+    <span class="nx">@js</span><span class="p">.</span><span class="nx">lib</span><span class="p">()</span>
+    <span class="nx">@css</span><span class="p">.</span><span class="nx">lib</span><span class="p">()</span>
+  
+  <span class="nv">html:</span>
+    
+    <span class="nv">app: </span><span class="nf">(cb = -&gt;) -&gt;</span>        
+      <span class="nx">exports</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">compile</span><span class="p">.</span><span class="nx">jade</span> <span class="s1">&#39;app.jade&#39;</span><span class="p">,</span> <span class="nf">(result) -&gt;</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span> <span class="s1">&#39;./public/index.html&#39;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">output</span>
+        <span class="nx">util</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Compiled app.jade to index.html&#39;</span><span class="p">)</span>
+        <span class="nx">cb</span><span class="p">()</span>
+  
+  <span class="nv">js:</span>
+    
+    <span class="nv">app: </span><span class="o">-&gt;</span>
+      <span class="nv">output = </span><span class="p">[]</span>
+      <span class="nx">exports</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">client_dirs</span><span class="p">.</span><span class="nx">map</span> <span class="nf">(dir) -&gt;</span>
+        <span class="nv">path = </span><span class="s2">&quot;./app/#{dir}&quot;</span>
+        <span class="k">if</span> <span class="nv">files = </span><span class="nx">file_utils</span><span class="p">.</span><span class="nx">readDirSync</span><span class="p">(</span><span class="nx">path</span><span class="p">).</span><span class="nx">files</span>
+          <span class="nv">files = </span><span class="nx">utils</span><span class="p">.</span><span class="nx">ensureCorrectOrder</span><span class="p">(</span><span class="nx">files</span><span class="p">)</span>
+          <span class="nx">files</span><span class="p">.</span><span class="nx">forEach</span> <span class="nf">(file) -&gt;</span>
+            <span class="k">if</span> <span class="nx">file</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;coffee&#39;</span>
+              <span class="nx">util</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;  Compiling and adding &#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">)</span>
+              <span class="nx">exports</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">compile</span><span class="p">.</span><span class="nx">coffee</span> <span class="nx">file</span><span class="p">,</span> <span class="nf">(result) -&gt;</span> <span class="nx">output</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">output</span><span class="p">)</span>
+            <span class="k">else</span>
+              <span class="nx">util</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;  Adding &#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">)</span>
+              <span class="nv">js = </span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span> <span class="s2">&quot;#{SS.root}/#{file}&quot;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span>
+              <span class="nx">output</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">js</span><span class="p">)</span>
+      <span class="nv">final_output = </span><span class="nx">output</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">)</span>
+      <span class="nv">final_output = </span><span class="nx">utils</span><span class="p">.</span><span class="nx">minifyJS</span><span class="p">(</span><span class="s1">&#39;application code&#39;</span><span class="p">,</span> <span class="nx">final_output</span><span class="p">)</span>
+
+      <span class="nx">deleteFilesInPublicDir</span><span class="p">(</span><span class="sr">/^app.*js$/</span><span class="p">)</span>
+      <span class="nv">exports.assets.files.js.app = </span><span class="s2">&quot;app_#{Date.now()}.js&quot;</span>
+      <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="s2">&quot;#{exports.assets.public_path}/#{exports.assets.files.js.app}&quot;</span><span class="p">,</span> <span class="nx">final_output</span><span class="p">)</span>
+      
+    <span class="nv">lib: </span><span class="o">-&gt;</span>
+      <span class="nx">deleteFilesInPublicDir</span><span class="p">(</span><span class="sr">/^lib.*js$/</span><span class="p">)</span>
+      <span class="nv">exports.assets.files.js.lib = </span><span class="s2">&quot;lib_#{Date.now()}.js&quot;</span>
+      <span class="nv">output = </span><span class="nx">utils</span><span class="p">.</span><span class="nx">concatFiles</span><span class="p">(</span><span class="s1">&#39;./lib/client&#39;</span><span class="p">)</span>
+      <span class="nx">util</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;  Appending SocketStream client files...&quot;</span><span class="p">)</span>
+      <span class="nx">output</span> <span class="o">+=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s2">&quot;#{system_path}/cached/lib.min.js&quot;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+      <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="s2">&quot;#{exports.assets.public_path}/#{exports.assets.files.js.lib}&quot;</span><span class="p">,</span> <span class="nx">output</span><span class="p">)</span>
+      <span class="nx">emitter</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;regenerate_html&#39;</span><span class="p">)</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>SocketStream developers only!
+Should only ever be called when modifying a SocketStream client lib file directly.
+Will only save correctly if package is linked with 'sudo npm link'</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nv">system: </span><span class="o">-&gt;</span>
+      <span class="nv">client_file_path = </span><span class="s2">&quot;#{system_path}/socketstream.coffee&quot;</span>
+      <span class="nv">output = </span><span class="nx">utils</span><span class="p">.</span><span class="nx">concatFiles</span><span class="p">(</span><span class="s2">&quot;#{system_path}/js&quot;</span><span class="p">)</span>
+      <span class="nv">client = </span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span> <span class="nx">client_file_path</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span>
+      <span class="k">try</span>
+        <span class="nv">js = </span><span class="nx">coffee</span><span class="p">.</span><span class="nx">compile</span><span class="p">(</span><span class="nx">client</span><span class="p">)</span>
+        <span class="nx">util</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;  Compiled SocketStream client into JS&quot;</span><span class="p">)</span>
+        <span class="nx">output</span> <span class="o">+=</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">minifyJS</span><span class="p">(</span><span class="s1">&#39;client file&#39;</span><span class="p">,</span> <span class="nx">js</span><span class="p">)</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="s2">&quot;#{system_path}/cached/lib.min.js&quot;</span><span class="p">,</span> <span class="nx">output</span><span class="p">)</span>
+      <span class="k">catch</span> <span class="nx">e</span>
+        <span class="nx">SS</span><span class="p">.</span><span class="nx">log</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">exception</span><span class="p">(</span><span class="s2">&quot;Error: Unable to compile or save the SocketStream client file to JS&quot;</span><span class="p">)</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span>
+      <span class="nx">util</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;SocketStream system client files updated. Recompiling application lib file to include new code...&quot;</span><span class="p">)</span>
+      <span class="nx">exports</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">pack</span><span class="p">.</span><span class="nx">js</span><span class="p">.</span><span class="nx">lib</span><span class="p">()</span>
+    
+  <span class="nv">css:</span>
+    
+    <span class="nv">app: </span><span class="o">-&gt;</span>
+      <span class="nx">deleteFilesInPublicDir</span><span class="p">(</span><span class="sr">/^app.*css$/</span><span class="p">)</span>
+      <span class="nv">exports.assets.files.css.app = </span><span class="s2">&quot;app_#{Date.now()}.css&quot;</span>
+      <span class="nx">exports</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">compile</span><span class="p">.</span><span class="nx">styl</span> <span class="s1">&#39;app.styl&#39;</span><span class="p">,</span> <span class="nf">(result) -&gt;</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="s2">&quot;#{exports.assets.public_path}/#{exports.assets.files.css.app}&quot;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">output</span><span class="p">)</span>
+        <span class="nx">util</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Stylus files compiled into CSS&#39;</span><span class="p">)</span>
+      
+    <span class="nv">lib: </span><span class="o">-&gt;</span>
+      <span class="nx">deleteFilesInPublicDir</span><span class="p">(</span><span class="sr">/^lib.*css$/</span><span class="p">)</span>
+      <span class="nv">output = </span><span class="nx">utils</span><span class="p">.</span><span class="nx">concatFiles</span><span class="p">(</span><span class="s2">&quot;./lib/css&quot;</span><span class="p">)</span>
+      <span class="nv">exports.assets.files.css.lib = </span><span class="s2">&quot;lib_#{Date.now()}.css&quot;</span>
+      <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="s2">&quot;#{exports.assets.public_path}/#{exports.assets.files.css.lib}&quot;</span><span class="p">,</span> <span class="nx">output</span><span class="p">)</span>
+      <span class="nx">util</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;CSS libs concatenated&#39;</span><span class="p">)</span>
+      <span class="nx">emitter</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;regenerate_html&#39;</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>PRIVATE</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">deleteFilesInPublicDir = </span><span class="nf">(rexexp) -&gt;</span>
+  <span class="nx">fs</span><span class="p">.</span><span class="nx">readdirSync</span><span class="p">(</span><span class="nx">exports</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">public_path</span><span class="p">).</span><span class="nx">map</span> <span class="nf">(file) -&gt;</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">unlink</span><span class="p">(</span><span class="s2">&quot;#{exports.assets.public_path}/#{file}&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nx">file</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">rexexp</span><span class="p">)</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

@@ -1,0 +1,61 @@
+<!DOCTYPE html>  <html> <head>   <title>zeromq.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="connection.html">                 connection.coffee               </a>                                           <a class="source" href="internal.html">                 internal.coffee               </a>                                           <a class="source" href="serializer.html">                 serializer.coffee               </a>                                           <a class="source" href="zeromq.html">                 zeromq.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               zeromq.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h2>ZeroMQ RPC Transport</h2>
+
+<p>Used when running in muti-process and multi-host cluster mode</p>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Just JSON for now. Others will be supported in the future</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">serializer = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../serializer.coffee&#39;</span><span class="p">)[</span><span class="nx">SS</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">cluster</span><span class="p">.</span><span class="nx">serialization</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nx">exports</span><span class="p">.</span><span class="nx">Client</span>
+
+  <span class="nv">connect: </span><span class="nf">(name) -&gt;</span>
+    <span class="vi">@socket = </span><span class="nx">SS</span><span class="p">.</span><span class="nx">internal</span><span class="p">.</span><span class="nx">zmq</span><span class="p">.</span><span class="nx">createSocket</span><span class="p">(</span><span class="s1">&#39;xreq&#39;</span><span class="p">)</span>
+    <span class="nx">@socket</span><span class="p">.</span><span class="nx">connect</span> <span class="nx">SS</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">cluster</span><span class="p">.</span><span class="nx">sockets</span><span class="p">.</span><span class="nx">fe_main</span>
+
+  <span class="nv">send: </span><span class="nf">(obj) -&gt;</span>
+    <span class="nv">msg = </span><span class="nx">serializer</span><span class="p">.</span><span class="nx">pack</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span>
+    <span class="nx">@socket</span><span class="p">.</span><span class="nx">send</span> <span class="nx">msg</span>
+
+  <span class="nv">listen: </span><span class="nf">(cb) -&gt;</span>
+    <span class="nx">@socket</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="k">try</span>
+        <span class="nx">cb</span> <span class="nx">serializer</span><span class="p">.</span><span class="nx">unpack</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span>
+      <span class="k">catch</span> <span class="nx">e</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Invalid RPC message received over ZeroMQ. Unable to parse #{@format} message. Reason given: #{e.message}&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nx">exports</span><span class="p">.</span><span class="nx">Server</span>
+
+  <span class="nv">connect: </span><span class="o">-&gt;</span>
+    <span class="vi">@socket = </span><span class="nx">SS</span><span class="p">.</span><span class="nx">internal</span><span class="p">.</span><span class="nx">zmq</span><span class="p">.</span><span class="nx">createSocket</span><span class="p">(</span><span class="s1">&#39;xrep&#39;</span><span class="p">)</span>
+    <span class="nx">@socket</span><span class="p">.</span><span class="nx">connect</span> <span class="nx">SS</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">cluster</span><span class="p">.</span><span class="nx">sockets</span><span class="p">.</span><span class="nx">be_main</span>
+  
+  <span class="nv">listen: </span><span class="nf">(cb) -&gt;</span>
+    <span class="nx">@socket</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">e1</span><span class="p">,</span> <span class="nx">e2</span><span class="p">,</span> <span class="nx">msg</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="k">try</span>
+        <span class="nv">obj = </span><span class="nx">serializer</span><span class="p">.</span><span class="nx">unpack</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span>
+        <span class="nx">cb</span> <span class="nx">obj</span><span class="p">,</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span>
+          <span class="nv">msg = </span><span class="nx">serializer</span><span class="p">.</span><span class="nx">pack</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+          <span class="nx">@socket</span><span class="p">.</span><span class="nx">send</span> <span class="nx">e1</span><span class="p">,</span> <span class="nx">e2</span><span class="p">,</span> <span class="nx">msg</span>
+      <span class="k">catch</span> <span class="nx">e</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Invalid RPC message received over ZeroMQ. Unable to parse #{@format} message. Reason given: #{e.message}&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nx">exports</span><span class="p">.</span><span class="nx">Publisher</span>
+
+  <span class="nv">connect: </span><span class="o">-&gt;</span>
+    <span class="vi">@socket = </span><span class="nx">SS</span><span class="p">.</span><span class="nx">internal</span><span class="p">.</span><span class="nx">zmq</span><span class="p">.</span><span class="nx">createSocket</span><span class="p">(</span><span class="s1">&#39;pub&#39;</span><span class="p">)</span>
+    <span class="nx">@socket</span><span class="p">.</span><span class="nx">bindSync</span> <span class="nx">SS</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">cluster</span><span class="p">.</span><span class="nx">sockets</span><span class="p">.</span><span class="nx">fe_pub</span>
+
+  <span class="nv">send: </span><span class="nf">(msg_type, message) -&gt;</span>
+    <span class="nx">@socket</span><span class="p">.</span><span class="nx">send</span> <span class="s1">&#39;event&#39;</span><span class="p">,</span> <span class="nx">msg_type</span><span class="p">,</span> <span class="nx">message</span>
+
+
+<span class="k">class</span> <span class="nx">exports</span><span class="p">.</span><span class="nx">Subscriber</span>
+
+  <span class="nv">connect: </span><span class="o">-&gt;</span>
+    <span class="vi">@socket = </span><span class="nx">SS</span><span class="p">.</span><span class="nx">internal</span><span class="p">.</span><span class="nx">zmq</span><span class="p">.</span><span class="nx">createSocket</span><span class="p">(</span><span class="s1">&#39;sub&#39;</span><span class="p">)</span>
+    <span class="nx">@socket</span><span class="p">.</span><span class="nx">connect</span> <span class="nx">SS</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">cluster</span><span class="p">.</span><span class="nx">sockets</span><span class="p">.</span><span class="nx">fe_pub</span>
+    <span class="nx">@socket</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;event&#39;</span><span class="p">)</span>
+
+  <span class="nv">listen: </span><span class="nf">(cb) -&gt;</span>
+    <span class="nx">@socket</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="nf">(msg_type, event_type, message) -&gt;</span>
+      <span class="nx">cb</span> <span class="nx">event_type</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span> <span class="nx">message</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
