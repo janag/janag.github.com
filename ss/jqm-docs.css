@@ -1,8 +1,4 @@
-/* jqm docs css
-
-Beware: lots of last-minute CSS going on in here 
-cobblers, shoes, 
-*/
+/* jqm docs css */
 
 body { background: #dddddd; }
 .ui-mobile .type-home .ui-content { margin: 0; background: #e5e5e5 url(../images/jqm-sitebg.png) top center repeat-x; }
