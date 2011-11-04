@@ -1,0 +1,553 @@
+<!DOCTYPE html> 
+<html> 
+  <head> 
+	<meta charset="utf-8" name="viewport" content="width=device-width, height=device-height">
+	<link rel="stylesheet" href="lib/jquery.mobile-1.0a4.1.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.min.js"></script>
+	<script type="text/javascript" src="lib/jquery.mobile-1.0a4.1.min.js"></script>
+  </head> 
+<body> 
+
+<!-- Home Page -->
+<!--
+<div data-role="page">
+	<div data-role="content"  data-theme="a" style="width: 100%; height: 100%">
+		<center>
+			<a href="#about"><img src="images/mobility_day.svg" alt="Sabre Mobility Day" align="top"></a>
+			<p><b>April 25 (A1-157)</b>
+		</center>
+	</div>
+</div>
+-->
+<!-- About Page-->
+<div data-role="page" id="about" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h1>MobilityDay 2011</h1>
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%">
+		<center>
+			<h5>Sabre Holdings (A1-157)</h5>
+			<h5>3150 Sabre Drive, Southlake TX 76092</h5>
+			<h5>(Seats:150 first-come, first-served)</h5>			
+			<h5><a href="#location">Directions</a></h5>
+			<h5><a href="#survey">Feedback</a></h5>					
+			<h5><a href="http://twitter.com/mobilityday2011" target="_blank"><img src="images/twitter.svg" alt="twitter"/></a>			
+		</center>
+	</div>
+	<div data-role="footer" data-position="fixed">
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#sessions" data-role="button"  data-icon="gear" data-theme="e">Sessions</a></li>
+				<li><a href="#speakers" data-role="button"  data-icon="star" data-theme="e">Speakers</a></li>
+				<li><a href="#exhibits" data-role="button"  data-icon="grid" data-theme="e">Exhibitors</a></li>		
+				<li><a href="#about" 	data-role="button"  data-icon="info" 
+					   class="ui-btn-active ui-state-persist">Info</a>
+				</li>				
+			</ul>
+		</div>
+	</div>
+</div>
+
+<!--Sessions Page-->
+<div data-role="page" id="sessions" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h1>Sessions</h1>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 		
+	</div>
+	<div data-role="content" >
+		<ul data-role="listview" data-theme="a" data-inset="true">
+			<li><img src="images/sam.png" alt="keynote" align="left" style="max-width:100%;">
+				<p><b>Opening Remarks</b></p>
+				<p>9:00am-9:15am</p>
+				<p>[A1-157]</p></a>
+			</li>
+			<li><a href="#app-landscape"><p><b>Mobile App Landscape</b></p>
+				<p>9:15am-10:00am [A1-157]</p></a>
+			</li>
+			<li><a href="#sencha"><p><b>Sencha Touch: MVC Pattern</b></p>
+				<p>10:00am-10:45am [A1-157]</p></a>
+			</li>
+			<li><a href="#perfecto"><p><b>Perfecto Mobile: Automated Testing</b></p>
+				<p>10:45am-11:30am [A1-157]</p></a>
+			</li>
+			<li><a href="#phonegap"><p><b>PhoneGap: Making Mobile Web app into Native</b></p>
+				<p>11:30am-12:15pm [A1-157]</p></a>
+			</li>
+			<li><a href="#windows7"><p><b>Microsoft: Windows Phone 7</b></p>
+				<p>1:00pm-1:45pm [A1-157]</p></a>
+			</li>
+			<li><a href="#ATT"><p><b>AT&T: Foundry Innovation Cetner</b></p>
+				<p>1:45pm-2:30pm [A1-157]</p></a>
+			</li>
+			<li><a href="#panel-discussion"><p><b>Panel: Mobile Thought Leaders</b></p>
+				<p>2:45pm-3:45pm [Cafeteria]</p></a>
+			</li>
+		</ul>
+		
+		<ul data-role="listview" data-theme="a" data-inset="true">				
+			<li>
+				<p><b>Usability Lab</b></p>
+				<p>10:30am-01:00pm [B1-527]</p>
+				<p>Showcasing how Sabre conducts </p>
+				<p>mobile usability testing</p>
+			</li>				
+			<li>
+				<p><b>Breakout Room</b></p>
+				<p>Whole day [A1-367 Honolulu]</p>
+			</li>					
+		</ul>		
+	</div>
+</div>
+
+<!--Mobile app landscape-->
+<div data-role="page" id="app-landscape" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a" >
+		<h5>Mobile App Landscape</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div>
+	<div data-role="content" data-theme="a"style="height: 100%"> 
+		<p>Describes the opportunity of mobilizing travel application products across multiple application devices, the challenges in developing and testing applications, and the progress in the mobile industry. </p>	
+	</div>
+</div>	
+
+<!--Sencha Touch MVC Pattern-->
+<div data-role="page" id="sencha" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a" >
+		<h5>Sencha Touch</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div>
+	<div data-role="content" data-theme="a"style="height: 100%"> 
+		<p>Sencha Touch is one of the very first enterprise-ready HTML5 Mobile Web frameworks.  The Mobility team will present how the MVC pattern was used in developing the GetThere Mobile Shop and Book application.</p>		
+	</div>
+</div>	
+
+<!--PerfectoMobile-->
+<div data-role="page" id="perfecto" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a" >
+		<h5>Perfecto Mobile</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%"> 
+		<p>Much of the mobile applications are still tested manually using the available emulators and phones. Automation testing on the actual phones on the real carrier network is taking shape. Perfecto Mobile is one of the pioneers. This session will show how to automate mobile application testing to increase the development velocity and quality.</p>
+	</div>
+</div>	
+
+<!--PhoneGap-->
+<div data-role="page" id="phonegap" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a" >
+		<h5>PhoneGap</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%"> 
+		<p>Thru using Mobile Web Technology, there is a possibility to build native application for each of the major smartphone operating systems. Phonegap is one of the alternatives. This session will show how to build native apps using the mobile web application assets in the cloud.</p>
+	</div>
+</div>	
+
+<!--Windows phone 7-->
+<div data-role="page" id="windows7" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a" >
+		<h5>Windows Phone 7</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%"> 
+		<p>This session will shows the unique features of Phone 7 and its developing platform to create amazing applications.</p>
+	</div>
+</div>	
+
+<!--AT&T-->
+<div data-role="page" id="ATT" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a" >
+		<h5>AT&T</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%"> 
+		<p>AT&T will describe their new test center and enterprise-level labs, where mobile developers can take advantage of the LTE network.  This helps in creating mobile ecosystems that can produce innovative mobile applications and services.</p>
+	</div>
+</div>	
+
+<!--Panel discussion page-->
+<div data-role="page" id="panel-discussion" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h1>Panel Discussion</h1>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 		
+	</div>
+	<div data-role="content" >
+		<ul data-role="listview" data-theme="a" data-inset="true">
+			<li><a href="#access-lane"><p><b>Access Lane</b></p>
+				<p>Speaker: Jason Day, CEO</p></a>
+			</li>
+			<li><a href="#bottle"><p><b>Bottle Rocket Apps</b></p>
+				<p>Speaker: Peter Taliancich, Business Development</p></a>
+			</li>				
+			<li><a href="#handmark"><p><b>Handmark</b></p>
+				<p>Speaker: Cassidy Lackey, VP 	Handmark Mobile App Studios</p></a>
+			</li>				
+			<li><a href="#match"><p><b>Match.com</b></p>
+				<p>Speaker: Shane Henderson, Director of Mobile Technology</p></a>
+			</li>			
+		</ul>	
+	</div>
+</div>	
+
+<!--Access Lane-->
+<div data-role="page" id="access-lane" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a" >
+		<h5>Access Lane</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div>
+	<div data-role="content" data-theme="a"style="height: 100%"> 
+		<p>Access Lane is the leading provider of UI customization and theme content in the Americas located in Lewisville, Texas.  They advance the experience of mobile device users by creating the ultimate customization, the full device theme, through licensing content and brands such as Harley Davidson, Disney, and Star Wars.</p>
+	<p>Speaker: Jason Day, CEO</p>
+	</div>
+</div>	
+
+<!--Bottle Rocket Apps-->
+<div data-role="page" id="bottle" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a" >
+		<h5>Bottle Rocket Apps</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div>
+	<div data-role="content" data-theme="a"style="height: 100%"> 
+		<p>Bottle Rocket Apps is an iPhone and iPad Developer located in Dallas, Texas. They are dedicated to creating high quality iPhone applications and mobile solutions and have produced apps for numerous companies including NPR, ESPN, BMW, PBS, & Discovery Channel.</p>	
+		<p>Speaker: Peter Taliancich, Business Development</p>
+	</div>
+</div>	
+
+<!--Handmark-->
+<div data-role="page" id="handmark" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a" >
+		<h5>Handmark</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div>
+	<div data-role="content" data-theme="a"style="height: 100%"> 
+		<p>Handmark specializes in delivering mobile application solutions for brands, publishers and media companies. Leveraging 10 years of experience, Handmark is trusted by many of the world's leading media brands including Associated Press, Zagat and Oxford University Press.</p>	
+		<p>Speaker: Cassidy Lackey, VP 	Handmark Mobile App Studios</p>	
+	</div>
+</div>	
+
+<!--Match.com-->
+<div data-role="page" id="match" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a" >
+		<h5>Match.com</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div>
+	<div data-role="content" data-theme="a"style="height: 100%"> 
+		<p>Match.com launched on the Web in April of 1995 to pioneer the online dating industry and now services 24 countries and territories and hosts Web sites in 15 different languages.  Their mission is simple: to help singles find the kind of relationship they’re looking for.</p>	
+		<p>Speaker: Shane Henderson, Director of Mobile Technology</p>
+	</div>
+</div>	
+
+<!--Speakers Page-->
+<div data-role="page" id="speakers" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h1>Speakers</h1>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 		
+	</div>
+	<div data-role="content" >
+		<ul data-role="listview" data-theme="a" data-inset="true">
+			<li><a href="#Fil"><p>Fil Maj<p></a></li>
+			<li><a href="#Eran"><p>Eran Yaniv</p></a></li>
+			<li><a href="#Wayne"><p>Wayne Parrott<p></a></li>
+			<li><a href="#Stephen-Burin"><p>Stephen Pond & Burin Asavesna<p></a></li>	
+			<li><a href="#Taylor"><p>Taylor Cowan<p></a></li>					
+			<li><a href="#Michael"><p>Michael Berry<p></a></li>								
+		</ul>
+	</div>
+</div>
+
+<!-- Fil -->
+<div data-role="page" id="Fil" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h5>Fil Maj</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%">
+		<p>Fil is Nitobi's Master Exploder. He works on maintaining and improving the "PhoneGap" framework, delivering compelling applications to clients and setting the foozball excellence standard at the Nitobi office. Fil has in-depth understanding of the mobile web and native landscape across platforms, although prefers working with Android-based devices. In the past, Fil has worked on top-1000 web properties based on .NET technologies for Microsoft as well as mobile web sites and applications for BlackBerry and Android devices.</p>
+	</div>
+</div>	
+
+<!-- Eran-->
+<div data-role="page" id="Eran" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h5>Eran Yaniv</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%">
+		<p>Eran Yaniv is the CEO and Founder of "Perfecto Mobile". He came to Perfecto Mobile from Comverse America, where he was vice president of product marketing. He also served as the general manager of the Comverse Mobile Data Division and led a major turnaround in the performance of the division by bringing in accounts such as Verizon  Wireless and T-Mobile. Prior to Comverse, Eran was the general manager of the Valisys Quality Management business unit at Tecnomatix, where he also served as the director of research and development at Tecnomatix Ltd. in Israel.</p>	
+	</div>
+</div>		
+
+<!-- Wayne-->
+<div data-role="page" id="Wayne" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h5>Wayne Parrot</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%">
+		<p>Wayne is a managing partner and co-founder of "Genuitec,LLC" where he leads the development of the MobiOne Studio product. Prior to Genuitec, Wayne held technical positions on the Human Genome Project, NASA's AI Group and several technology startups.</p>	
+	</div>
+</div>		
+
+<!-- Stephen & Burin-->
+<div data-role="page" id="Stephen-Burin" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h5>Stephen & Burin</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%">
+		<p>Stephen and Burin are the Mobile Web Client developers in Enterprise Mobility Group of Sabre. Recently, they developed the HTML5 version of GetThere Mobile Application successfully. Both have combined 15 years of experience of developing web applications and passionate anything about mobile.</p>	
+	</div>
+</div>		
+
+<!-- Taylor -->
+<div data-role="page" id="Taylor" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h5>Taylor Cowan</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%">
+		<p>Taylor Cowan is an Architect Evangelist with Microsoft, based in Dallas,TX, where he focuses on the early adoption of Microsoft technologies for customers in Texas, Oklahoma, Arkansas, and Louisiana.  With each year bringing a new portfolio of technologies, his focus in 2011 has been on fostering Windows Phone 7 application development.  He also provides talks and architecture guidance for teams ready to begin developing apps for cloud using Microsoft's Azure cloud platform. He is proud to claim a role in the success of two WP7 apps by two great Texas companies, Travelocity and USAA.</p>
+	</div>
+</div>	
+
+
+<!-- Michael Berry-->
+<div data-role="page" id="Michael" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h5>Michael Berry</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%">
+		<p>Michael will explain about ATT Foundry innovation center and their new test center and enterprise-level labs, where mobile developers can take advantage of the LTE network. This helps in creating mobile ecosystems that can produce innovative mobile applications and services.</p>	
+	</div>
+</div>		
+
+<!--Exhibitors Page-->
+<div data-role="page" id="exhibits" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h1>Exhibitors</h1>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 		
+	</div>
+	<div data-role="content" >
+		<ul data-role="listview" data-theme="a" data-inset="true">
+			<li><a href="#phonegap-booth"><p>PhoneGap<p></a></li>
+			<li><a href="#perfecto-booth"><p>Perfecto Mobile</p></a></li>
+			<li><a href="#mobione-booth"><p>MobiOne</p></a></li>
+			<li><a href="#cotendo-booth"><p>Cotendo</p></a></li>	
+			<li><a href="#windows7-booth"><p>Windows Phone 7</p></a></li>	
+			<li><a href="titanium-booth"><p>Appcelerator Titanium</p></a></li>					
+		</ul>				
+		<ul data-role="listview" data-theme="a" data-inset="true">				
+			<li><a href="http://iphone.travelocity.com" target="_blank"><p>Travelocity</p></a></li>				
+			<li><a href="http://www.tripcase.com" target="_blank"><p>TripCase</p></a></li>					
+			<li><a href="https://www.virtuallythere.com" target="_blank"><p>Sabre Virtually There</p></a></li>			  <li><a href="http://mtx.sabre.com/GetThere" target="_blank"><p>GetThere</p></a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- Titanium -->
+<div data-role="page" id="titanium-booth" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h5>Titanium</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%">
+	<a href="http://www.appcelerator.com/" target="_blank"><img src="images/titanium.png" alt="titanium" align="right"></a>					
+		<p>A free and open source application development platform, Titanium lets you create native mobile, tablet and desktop application experiences using existing web skills like Javascript, HTML, CSS, Python, Ruby, and PHP</p>
+	</div>
+</div>		
+
+<!-- PhoneGap -->
+<div data-role="page" id="phonegap-booth" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h5>PhoneGap</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%">
+		<a href="http://www.phonegap.com/" target="_blank"><img src="images/phonegap.png" alt="perfecto" 
+			align="right"></a>					
+		<p>PhoneGap is a cross-platform development framework that enables developers to use HTML5 to deliver applications to iOS, Android, BlackBerry, webOS and Symbian platforms. PhoneGap applications are native applications, under the hood leveraging a platform's browser to deliver content and compelling user experiences. At the same time, developers can access any functionality native to each platform with the help of a JavaScript API. Write once, run (almost) anywhere.</p>
+	</div>
+</div>		
+
+<!-- Perfecto -->
+<div data-role="page" id="perfecto-booth" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h5>Perfecto Mobile</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%">
+		<a href="http://perfectomobile.com/" target="_blank"><img src="images/perfecto.png" alt="perfecto" 
+			align="right"></a>
+		<p>PerfectoMobile is formerly known as Nexperience, is a leading provider of remote access and automated testing solutions for mobile devices. The company was founded in 2006 by a group of highly experienced executives from the mobile and telecom industries. Perfecto Mobile enables consumer serving enterprises, mobile operators, device manufacturers, and mobile developers, to significantly increase the quality of their products and on-going services while reducing time-to-market, costs and logistical efforts. By providing automated and manual remote access to real mobile devices around the globe, the company's MobileCloud platform dramatically improves efficiency of operations in the various stages of the mobile product life cycle, including development, testing, porting, deployment, and on-going monitoring in support of commercial services.<p>		
+	</div>
+</div>		
+
+<!-- MobiOne -->
+<div data-role="page" id="mobione-booth" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h5>MobiOne</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%">
+		<a href="http://www.genuitec.com/mobile/" target="_blank"><img src="images/mobione.png" alt="mobione" 
+			align="right"></a>
+		<p>MobiOne Studio is the emerging standard for mobile design and testing. Now, anyone can build and test mobile applications in just minutes - with minimal technical know how. MobiOne's intuitive drag-n-drop UI designer and integrated Test Center make taking an app idea from concept to completion a breeze.</p>	
+	</div>
+</div>			
+
+<!-- Cotendo -->
+<div data-role="page" id="cotendo-booth" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h5>MobiOne</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%">
+		<a href="http://www.cotendo.com/" target="_blank"><img src="images/cotendo.png" alt="keynote" 
+			align="right"></a>
+		<p>Cotendo is an innovator of software-based mobile and website acceleration technologies, Cotendo delivers mobile and web acceleration through a services suite integrating dynamic and static content acceleration, SSL, load balancing, performance monitoring, real-time reporting, and more. Unified on a single platform, the superior performance and functionality of the Cotendo services suite enables clients to maximize monetization and productivity of their mobile and web assets.</p>	
+	</div>
+</div>		
+
+<!-- Windows7 -->
+<div data-role="page" id="windows7-booth" style="width: 100%; height: 100%">
+	<div data-role="header" data-theme="a">
+		<h5>Windows Phone 7</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 
+	</div>
+	<div data-role="content" data-theme="a" style="height: 100%">
+		<a href="http://www.microsoft.com/windowsphone" target="_blank"><img src="images/windows7.png" alt="keynote" align="right"></a>
+		<p>Windows Phone 7</a> is a mobile operating system developed by Microsoft, and is the successor to its Windows Mobile platform. The unique features of Phone 7 and its developing platform to create amazing applications will be displayed.</p>
+	</div>
+</div>	
+
+<!-- Survey Page -->	
+<div data-role="page" id="survey">
+	<div data-role="header" data-theme="a">
+		<h1>Feedback</h1>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div>
+	<div data-role="content">
+		<form action="http://sabre.no.de:3000/survey" method="get">
+		<div data-role="fieldcontain">
+				<label for="name">Sessions:</label>
+				<select name="session" id="select-choice-a" data-native-menu="false">
+					<option value="All">ALL</option>					
+					<option value="Mobile App Landscape">Mobile App Landscape</option>
+					<option value="Sencha Touch">Sencha Touch</option>
+					<option value="Perfecto">Perfecto Mobile</option>
+					<option value="PhoneGap">PhoneGap</option>
+					<option value="Windows7">Windows Phone 7</option>
+					<option value="ATT">AT&T</option>
+					<option value="Panel">Panel Discussion</option>
+					<option value="Exhibits">Exhibits</option>					
+				</select>
+		</div>
+		
+		<div data-role="fieldcontain">
+		    <fieldset data-role="controlgroup" data-type="vertical">
+		     	<legend>How would you rate the session?</legend>
+		         	<input type="radio" name="rating" id="radio-choice-c" value="great"/>
+		         	<label for="radio-choice-c">Great</label>
+		         	<input type="radio" name="rating" id="radio-choice-d" value="Good" />
+		         	<label for="radio-choice-d">Good</label>
+		         	<input type="radio" name="rating" id="radio-choice-e" value="Average" />
+		         	<label for="radio-choice-e">Average</label>
+		    </fieldset>
+		</div>
+		
+		<div data-role="fieldcontain">
+			<label for="name">E-mail/Phone:</label>
+			<input type="text" name="contact" id="name" value=""  />
+		</div>			
+			
+		<div data-role="fieldcontain">
+			<label for="textarea">Any additional comments?</label>
+			<textarea cols="40" rows="8" name="comments" id="textarea"></textarea>
+		</div>
+		
+		<center><button type="submit" data-theme="e" >Submit</button></center>
+	</form>
+	</div>
+</div>
+
+<!-- Location Page-->
+<div data-role="page" class="page-map" id="location" style="width:100%; height:100%;">
+	<div data-role="header" data-theme="a" >
+		<h5>Sabre Holdings</h5>
+		<a href="#about" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div>
+	<div data-role="content" style="width:100%; height:100%; padding:0;"> 
+		<div id="map_canvas" style="width:100%; height:100%;"></div>
+	</div>
+</div>	
+
+<!-- Google Map-->
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+		function initialize(lat,lng) {
+			var sabre = new google.maps.LatLng(lat, lng);
+			var myOptions = {
+				zoom: 15,
+				center: sabre,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+		    };
+		    var map = new google.maps.Map(document.getElementById("map_canvas"),myOptions);
+			var latlngStr =  "3150 Sabre Drive, " + "<br/>" + "Southlake, TX 76092";
+			
+			// InfoWindow
+			var infoWindow = new google.maps.InfoWindow({content: "Sabre Holdings, TX"});
+			infoWindow.setContent(latlngStr);
+			infoWindow.setPosition(sabre);
+			infoWindow.open(map);
+			
+			// Marker
+			var marker = new google.maps.Marker({
+			  position: sabre, 
+			  map: map, 
+			  title:"Sabre Holdings"
+			}); 
+		}
+		var latitude  = 32.983362;
+		var longitude = -97.160252;
+		initialize(latitude, longitude);
+	</script>
+	
+<!--	
+	<script src="http://widgets.twimg.com/j/2/widget.js"></script>
+		<script>
+		new TWTR.Widget({
+		  version: 2,
+		  type: 'search',
+		  search: 'rainbow',
+		  interval: 6000,
+		  title: '',
+		  subject: 'GetThere Submit',
+		  width: 250,
+		  height: 300,
+		  theme: {
+			shell: {
+			  background: '#c40827',
+			  color: '#ffffff'
+			},
+			tweets: {
+			  background: '#d4d4d4',
+			  color: '#444444',
+			  links: '#140cf5'
+			}
+		  },
+		  features: {
+			scrollbar: false,
+			loop: true,
+			live: true,
+			hashtags: true,
+			timestamp: true,
+			avatars: true,
+			toptweets: true,
+			behavior: 'default'
+		  }
+		}).render().start();
+		</script>
+-->		
+</body>
+</html>
