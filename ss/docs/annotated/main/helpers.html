@@ -1,0 +1,222 @@
+<!DOCTYPE html>  <html> <head>   <title>helpers.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="generator.html">                 generator.coffee               </a>                                           <a class="source" href="helpers.html">                 helpers.js               </a>                                           <a class="source" href="internal.html">                 internal.coffee               </a>                                           <a class="source" href="logger.html">                 logger.coffee               </a>                                           <a class="source" href="main.html">                 main.coffee               </a>                                           <a class="source" href="redis.html">                 redis.coffee               </a>                                           <a class="source" href="socketstream.html">                 socketstream.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               helpers.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h2>Helpers</h2>
+
+<p>These prototype helpers affect ALL server-side and shared code. Client-side helpers must always have a server-side equivalent 
+Be very careful about introducing new helpers as they may break external third-party client-side libraries.
+Thanks to Addy Osmani for writing these and providing tests at https://github.com/addyosmani/socketstream-helpers</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm">	.bind() support</span>
+<span class="cm">**/</span>
+
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">bind</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">bind</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">obj</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">slice</span> <span class="o">=</span> <span class="p">[].</span><span class="nx">slice</span><span class="p">,</span>
+        <span class="nx">args</span> <span class="o">=</span> <span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> 
+        <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span> 
+        <span class="nx">nop</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{},</span> 
+        <span class="nx">bound</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span> <span class="k">this</span> <span class="k">instanceof</span> <span class="nx">nop</span> <span class="o">?</span> <span class="k">this</span> <span class="o">:</span> <span class="p">(</span> <span class="nx">obj</span> <span class="o">||</span> <span class="p">{}</span> <span class="p">),</span> 
+                              <span class="nx">args</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span> <span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span> <span class="p">)</span> <span class="p">);</span>    
+        <span class="p">};</span>
+
+    <span class="nx">nop</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+    <span class="nx">bound</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">nop</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="nx">bound</span><span class="p">;</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">	Removes any duplicate entries from the current array</span>
+<span class="cm">**/</span>
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">unique</span> <span class="p">)</span> <span class="p">{</span>
+	<span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">unique</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">b</span><span class="p">){</span>
+		 <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span><span class="nx">q</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">;</span>
+		 <span class="k">for</span><span class="p">(</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">l</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+		  <span class="k">if</span><span class="p">(</span> <span class="nx">a</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="k">this</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">b</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span> 
+			<span class="nx">a</span> <span class="o">+=</span> <span class="k">this</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+			<span class="p">}</span>
+		 <span class="p">}</span>
+		<span class="k">return</span> <span class="nx">a</span><span class="p">;</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">	Removes any duplicate entries from the current string</span>
+<span class="cm">**/</span>
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">unique</span> <span class="p">)</span> <span class="p">{</span>
+	<span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">unique</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">b</span> <span class="p">)</span> <span class="p">{</span>
+		 <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[],</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+		 <span class="k">for</span><span class="p">(</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">l</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+		  <span class="k">if</span><span class="p">(</span> <span class="nx">a</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="k">this</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">b</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">a</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="k">this</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">);</span> <span class="p">}</span>
+		 <span class="p">}</span>
+		<span class="k">return</span> <span class="nx">a</span><span class="p">;</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">	Returns the last character in the current string</span>
+<span class="cm">**/</span>
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">last</span> <span class="p">)</span> <span class="p">{</span>
+	<span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">last</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+		<span class="k">return</span> <span class="k">this</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">	Returns the last element in the current array</span>
+<span class="cm">**/</span>
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">last</span> <span class="p">)</span> <span class="p">{</span>
+	<span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">last</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+		<span class="k">return</span> <span class="k">this</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">	Truncates the current string to the supplied length</span>
+<span class="cm">**/</span>
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">truncate</span> <span class="p">)</span> <span class="p">{</span>
+	<span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">truncate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">length</span><span class="p">){</span>	
+		<span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+		    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">length</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span><span class="p">;</span>
+		<span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">	Truncates the current array to the supplied length</span>
+<span class="cm">**/</span>
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">truncate</span> <span class="p">)</span> <span class="p">{</span>
+	<span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">truncate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">length</span><span class="p">){</span>
+		<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">length</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">	Returns a random character from the current string</span>
+<span class="cm">**/</span>
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">random</span> <span class="p">)</span> <span class="p">{</span>
+	<span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">random</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">r</span> <span class="p">)</span> <span class="p">{</span>
+		 <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+		 <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="nx">r</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">r</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="p">}</span>
+		 <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="nx">r</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">r</span> <span class="o">=</span> <span class="nx">r</span> <span class="o">%</span> <span class="nx">l</span><span class="p">;</span> <span class="p">}</span>
+		 <span class="k">else</span> <span class="p">{</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">r</span><span class="p">;</span> <span class="nx">r</span> <span class="o">=</span> <span class="nx">l</span> <span class="o">+</span> <span class="nx">r</span> <span class="o">%</span> <span class="nx">l</span><span class="p">;</span> <span class="p">}</span>
+		 <span class="k">return</span> <span class="k">this</span><span class="p">[</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span> <span class="nx">r</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">-</span> <span class="nx">i</span> <span class="p">)</span> <span class="p">];</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">	Returns a random element from the current array</span>
+<span class="cm">**/</span>
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">random</span> <span class="p">)</span> <span class="p">{</span>
+	<span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">random</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">r</span> <span class="p">)</span> <span class="p">{</span>
+		 <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+		 <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="nx">r</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">r</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="p">}</span>
+		 <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="nx">r</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">r</span> <span class="o">=</span> <span class="nx">r</span> <span class="o">%</span> <span class="nx">l</span><span class="p">;</span> <span class="p">}</span>
+		 <span class="k">else</span> <span class="p">{</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">r</span><span class="p">;</span> <span class="nx">r</span> <span class="o">=</span> <span class="nx">l</span> <span class="o">+</span> <span class="nx">r</span> <span class="o">%</span> <span class="nx">l</span><span class="p">;</span> <span class="p">}</span>
+		 <span class="k">return</span> <span class="k">this</span><span class="p">[</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span> <span class="nx">r</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">-</span> <span class="nx">i</span> <span class="p">)</span> <span class="p">];</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">	Boolean check to find out if a supplied character is in the current string</span>
+<span class="cm">**/</span>
+
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">include</span> <span class="p">)</span> <span class="p">{</span>
+	<span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">include</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+	    <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+	    <span class="k">while</span> <span class="p">(</span><span class="nx">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+	        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="nx">value</span><span class="p">)</span> <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+	    <span class="p">}</span>
+	    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">	Boolean check to find out if a supplied element/string is in the current array</span>
+<span class="cm">**/</span>
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">include</span> <span class="p">)</span> <span class="p">{</span>
+	<span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">include</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+	    <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+	    <span class="k">while</span> <span class="p">(</span><span class="nx">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+	        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="nx">value</span><span class="p">)</span> <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+	    <span class="p">}</span>
+	    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">	Boolean check to find out if a supplied character is in the current string</span>
+<span class="cm">**/</span>
+
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">contains</span> <span class="p">)</span> <span class="p">{</span>
+	<span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">contains</span> <span class="o">=</span> <span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">include</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">	Boolean check to find out if a supplied character is in the current array</span>
+<span class="cm">**/</span>
+
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">contains</span> <span class="p">)</span> <span class="p">{</span>
+	<span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">contains</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">include</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">	Boolean check to find out if an array contains any elements</span>
+<span class="cm">**/</span>
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">any</span> <span class="p">)</span> <span class="p">{</span>
+	<span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">any</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+		<span class="k">return</span> <span class="o">!</span><span class="p">(</span><span class="k">this</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">constructor</span><span class="o">==</span><span class="nb">Array</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="o">==</span><span class="mi">0</span><span class="p">);</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">	Sanitize content containing URLs or mailto/email references</span>
+<span class="cm">**/</span>
+<span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">sanitize</span> <span class="p">)</span> <span class="p">{</span>
+	<span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">sanitize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+		<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/(([fh]+t+p+s?\:\/)+([^&quot;&#39;\s]+))/gi</span><span class="p">,</span><span class="s2">&quot;&lt;a href=\&quot;$1\&quot; target=\&quot;_blank\&quot;&gt;$1&lt;\/a&gt;&quot;</span><span class="p">).</span>
+		  <span class="nx">replace</span><span class="p">(</span><span class="sr">/([a-z0-9\-\.]+\@[a-z0-9\-]+([^&quot;&#39;\s]+))/gi</span><span class="p">,</span><span class="s2">&quot;&lt;a href=\&quot;mailto:$1\&quot; target=\&quot;_blank\&quot;&gt;$1&lt;\/a&gt;&quot;</span><span class="p">);</span>
+	<span class="p">};</span>
+<span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Additional server-side only helpers</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">intersect</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">array</span><span class="p">){</span>
+  <span class="k">return</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span> <span class="k">return</span> <span class="nx">array</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span> <span class="p">}));</span>
+<span class="p">};</span>
+
+<span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="k">delete</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+  <span class="k">return</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span> <span class="k">return</span> <span class="nx">n</span> <span class="o">!=</span> <span class="nx">value</span><span class="p">;</span> <span class="p">}));</span>
+<span class="p">};</span>
+
+<span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">capitalized</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="k">return</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>Not very smart at the moment. Will be improved in the future</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nb">Number</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">pluralize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">singular</span><span class="p">,</span> <span class="nx">plural</span><span class="p">){</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">plural</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="nx">plural</span> <span class="o">=</span> <span class="nx">singular</span> <span class="o">+</span> <span class="s1">&#39;s&#39;</span><span class="p">;</span>
+  <span class="k">return</span> <span class="k">this</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="p">(</span><span class="k">this</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">?</span> <span class="nx">singular</span> <span class="o">:</span> <span class="nx">plural</span><span class="p">);</span>
+<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Merges associative objects. http://onemoredigit.com/post/1527191998/extending-objects-in-node-js</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span><span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="s2">&quot;extend&quot;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">enumerable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nx">value</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">recursive</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">source</span><span class="p">,</span> <span class="nx">destination</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">property</span> <span class="k">in</span> <span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">source</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">property</span><span class="p">))</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">destination</span><span class="p">[</span><span class="nx">property</span><span class="p">])</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span>
+            <span class="nx">destination</span><span class="p">[</span><span class="nx">property</span><span class="p">]</span> <span class="o">=</span> <span class="nx">recursive</span><span class="p">(</span><span class="nx">source</span><span class="p">[</span><span class="nx">property</span><span class="p">],</span> <span class="nx">destination</span><span class="p">[</span><span class="nx">property</span><span class="p">]);</span>
+          <span class="k">else</span>
+            <span class="nx">destination</span><span class="p">[</span><span class="nx">property</span><span class="p">]</span> <span class="o">=</span> <span class="nx">source</span><span class="p">[</span><span class="nx">property</span><span class="p">];</span>
+        <span class="p">};</span>
+      <span class="p">};</span>
+      <span class="k">return</span> <span class="nx">destination</span><span class="p">;</span>
+     <span class="p">};</span>
+     <span class="k">return</span> <span class="nx">recursive</span><span class="p">(</span><span class="nx">source</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>Output the keys within an object</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span><span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="s2">&quot;keys&quot;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">enumerable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nx">value</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="p">}</span>
+<span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>Boolean check to find out if an object contains any custom-defined properties</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span><span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="s2">&quot;any&quot;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">enumerable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> 
+  <span class="nx">value</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  	<span class="kd">var</span> <span class="nx">obj</span><span class="p">,</span> <span class="nx">result</span><span class="p">;</span> <span class="nx">obj</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span> <span class="nx">result</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">obj</span><span class="p">)</span> <span class="p">{</span> <span class="k">if</span> <span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">result</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span> <span class="p">}</span> <span class="p">};</span>
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>	
+  <span class="p">}</span>
+<span class="p">});</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
