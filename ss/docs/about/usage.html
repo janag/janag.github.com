@@ -79,7 +79,7 @@
 								<li>Server files can be nested. E.g. SS.server.users.online.yesterday() would call the 'yesterday' method in /app/server/users/online.coffee</li>
 								<li>You may also nest objects within objects to provide namespacing within the same file</li>
 								<li>@session gives you direct access to the current session</li>
-								<li>@request gives you meta data regarding the RPC call (includes any HTTP POST data if present)<li>
+								<li>@request gives you meta data regarding the RPC call (includes any HTTP POST data if present)</li>
 							</ul>
 							<h5>/app/shared</h5>
 							<ul><li>See 'Sharing Code' section</li></ul>
@@ -91,7 +91,7 @@
 								<li>You cannot @import additional files into static .css files - use Stylus or Less instead</li>
 								<li>If you wish to use CSS libraries within your project (e.g. normalize.css or jQuery UI) put these in /lib/css instead, or feel free to link to hosted CDN files in /app/views/app/jade</li>
 								<li>Stylus & Less files are automatically compiled and served on-the-fly in development mode and pre-compiled/compressed/cached in staging and production</li>
-							<ul>
+							</ul>
 							<h5>/app/views</h5>
 							<ul>
 								<li>Either /app/views/app.jade or /app/views/app.html must exist. This should contain all the static layout HTML your app will ever need.</li>
